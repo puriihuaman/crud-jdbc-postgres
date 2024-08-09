@@ -19,11 +19,18 @@ public class ProductController {
 			"Falló la creación del producto";
 	}
 
+	public String updateProduct(Product _product) {
+		int response = productModel.updateProduct(_product);
+		return response == 1 ?
+			"Producto actualizado exitosamente" :
+			"Falló la actualización del producto";
+	}
+
 	public String deleteProduct(UUID _productId) {
 		int response = productModel.deleteProduct(_productId);
 		return response == 1 ?
 			"Producto eliminado exitosamente" :
-			"Fallo la eliminación del producto";
+			"Falló la eliminación del producto";
 	}
 
 	public List<Product> searchProduct(String _productName) {

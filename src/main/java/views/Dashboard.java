@@ -511,7 +511,20 @@ public class Dashboard extends JFrame {
 	}
 
 	private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
+		UUID productId = UUID.fromString(txtCode.getText());
+		String productName = txtProductName.getText().trim();
+		double price = Double.parseDouble(txtPrice.getText().trim());
+		short stock = Short.parseShort(txtStock.getText().trim());
+
+		System.out.println(productName);
+		if (!productName.isEmpty() && price > 0 && stock > 0) {
+			Product product = new Product(productId, productName, price, stock);
+
+			String message = controller.updateProduct(product);
+			System.out.println(message);
+			clearFields();
+			uploadProducts();
+		}
 	}
 
 	private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {
@@ -519,6 +532,8 @@ public class Dashboard extends JFrame {
 		if (!productId.isEmpty()) {
 			String message = controller.deleteProduct(UUID.fromString(productId));
 			System.out.println(message);
+			uploadProducts();
+			clearFields();
 		}
 	}
 
@@ -527,6 +542,9 @@ public class Dashboard extends JFrame {
 		txtProductName.setText("");
 		txtPrice.setText("");
 		txtStock.setText("");
+		txtProductName.requestFocus(true);
+		btnSearch.setEnabled(true);
+		btnRegister.setEnabled(true);
 	}
 
 	private DefaultTableModel tableModel;
