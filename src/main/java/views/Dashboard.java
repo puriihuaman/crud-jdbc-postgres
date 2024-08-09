@@ -5,6 +5,11 @@ import models.Product;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.UUID;
 
@@ -71,6 +76,7 @@ public class Dashboard extends JFrame {
 		btnRegister = new javax.swing.JButton();
 		btnUpdate = new javax.swing.JButton();
 		btnDelete = new javax.swing.JButton();
+		lblAlertMessage = new javax.swing.JLabel();
 		jPanel2 = new javax.swing.JPanel();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		tblProducts = new javax.swing.JTable();
@@ -145,6 +151,9 @@ public class Dashboard extends JFrame {
 				btnDeleteActionPerformed(evt);
 			}
 		});
+
+		lblAlertMessage.setBackground(new java.awt.Color(255, 51, 102));
+		lblAlertMessage.setFont(new java.awt.Font("Roboto", 0, 13)); // NOI18N
 
 		javax.swing.GroupLayout FormLayout = new javax.swing.GroupLayout(Form);
 		Form.setLayout(FormLayout);
@@ -231,12 +240,21 @@ public class Dashboard extends JFrame {
 								javax.swing.GroupLayout.PREFERRED_SIZE,
 								140,
 								javax.swing.GroupLayout.PREFERRED_SIZE
-							)))
+							))
+							.addGroup(
+								javax.swing.GroupLayout.Alignment.TRAILING,
+								FormLayout.createSequentialGroup().addComponent(
+									lblAlertMessage,
+									javax.swing.GroupLayout.PREFERRED_SIZE,
+									438,
+									javax.swing.GroupLayout.PREFERRED_SIZE
+								).addGap(140, 140, 140)
+							))
 						.addGap(32, 32, 32))
 					.addComponent(
 						jLabel1,
 						javax.swing.GroupLayout.DEFAULT_SIZE,
-						javax.swing.GroupLayout.DEFAULT_SIZE,
+						729,
 						Short.MAX_VALUE
 					))));
 		FormLayout.setVerticalGroup(FormLayout
@@ -279,7 +297,9 @@ public class Dashboard extends JFrame {
 						40,
 						javax.swing.GroupLayout.PREFERRED_SIZE
 					))
-				.addGap(32, 32, 32)
+				.addGap(9, 9, 9)
+				.addComponent(lblAlertMessage)
+				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 				.addGroup(FormLayout
 					.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 					.addComponent(
@@ -307,12 +327,6 @@ public class Dashboard extends JFrame {
 						javax.swing.GroupLayout.PREFERRED_SIZE
 					))
 				.addGap(16, 16, 16)));
-
-		jScrollPane1.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				jScrollPane1MouseClicked(evt);
-			}
-		});
 
 		tblProducts.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 		tblProducts.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{
@@ -438,7 +452,8 @@ public class Dashboard extends JFrame {
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
 
-	private void tblProductsMouseClicked(java.awt.event.MouseEvent evt) {
+	private void tblProductsMouseClicked(MouseEvent evt) {
+		lblAlertMessage.setText("");
 		if (evt.getClickCount() == 2) {
 			btnSearch.setEnabled(false);
 			btnRegister.setEnabled(false);
@@ -464,11 +479,7 @@ public class Dashboard extends JFrame {
 		}
 	}
 
-	private void jScrollPane1MouseClicked(java.awt.event.MouseEvent evt) {
-
-	}
-
-	private void txtProductNameKeyReleased(java.awt.event.KeyEvent evt) {
+	private void txtProductNameKeyReleased(KeyEvent evt) {
 		if (txtProductName.getText().isEmpty()) {
 			btnSearch.setEnabled(true);
 			btnRegister.setEnabled(true);
@@ -482,59 +493,99 @@ public class Dashboard extends JFrame {
 		uploadProducts();
 	}
 
-	private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {
+	private void btnSearchActionPerformed(ActionEvent evt) {
 		String productToSearch = txtProductName.getText().trim();
 		List<Product> products;
 
-		if (!productToSearch.isEmpty()) {
+		if (!productToSearch.isEmpty() && !productToSearch.isBlank() &&
+			productToSearch.length() != 0) {
 			System.out.println(productToSearch);
 			products = controller.searchProduct(productToSearch.toLowerCase());
 
 			loadTable(products);
+		} else {
+			clearFields();
+			alertMessage("Ingrese un valor a buscar", "error");
 		}
 	}
 
-	private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {
-		String productName = txtProductName.getText().trim();
-		double price = Double.parseDouble(txtPrice.getText().trim());
-		short stock = Short.parseShort(txtStock.getText().trim());
+	private void btnRegisterActionPerformed(ActionEvent evt) {
+		Product product = validateFields();
 
-		if (!productName.isEmpty() && price > 0 && stock > 0) {
-			Product product = new Product(productName, price, stock);
+		if (product != null) {
 			String message = controller.createProduct(product);
 			System.out.println(message);
+			alertMessage(message, "success");
 			clearFields();
 			uploadProducts();
 		} else {
+			alertMessage("Complete los campos correctamente!.", "error");
 			System.out.println("Complete los campos correctamente!.");
 		}
 	}
 
-	private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {
-		UUID productId = UUID.fromString(txtCode.getText());
-		String productName = txtProductName.getText().trim();
-		double price = Double.parseDouble(txtPrice.getText().trim());
-		short stock = Short.parseShort(txtStock.getText().trim());
+	private void btnUpdateActionPerformed(ActionEvent evt) {
+		String productId = txtCode.getText().trim();
+		Product product = validateFields();
 
-		System.out.println(productName);
-		if (!productName.isEmpty() && price > 0 && stock > 0) {
-			Product product = new Product(productId, productName, price, stock);
-
-			String message = controller.updateProduct(product);
+		if (product != null && !productId.isEmpty()) {
+			String message = controller.updateProduct(new Product(
+				UUID.fromString(productId),
+				product.getProductName(),
+				product.getPrice(),
+				product.getStock()
+			));
+			alertMessage(message, "success");
 			System.out.println(message);
 			clearFields();
 			uploadProducts();
+		} else {
+			alertMessage("Complete los campos correctamente!.", "error");
+			System.out.println("Complete los campos correctamente!.");
 		}
 	}
 
-	private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {
+	private void btnDeleteActionPerformed(ActionEvent evt) {
 		String productId = txtCode.getText().trim();
 		if (!productId.isEmpty()) {
 			String message = controller.deleteProduct(UUID.fromString(productId));
+			alertMessage(message, "success");
 			System.out.println(message);
 			uploadProducts();
 			clearFields();
+		} else {
+			alertMessage("Debe indicar el código del producto!.", "error");
+			System.out.println("Debe indicar el código del producto!.");
 		}
+	}
+
+	private Product validateFields() {
+		String productName = txtProductName.getText().trim();
+		String priceText = txtPrice.getText().trim();
+		String stockText = txtStock.getText().trim();
+
+		boolean isValid = !productName.isEmpty() && !priceText.isEmpty() &&
+			!stockText.isEmpty();
+
+		double price = 0;
+		short stock = 0;
+		try {
+			price = Double.parseDouble(priceText);
+			stock = Short.parseShort(stockText);
+		} catch (NumberFormatException ex) {
+			alertMessage("Ingrese un valor positivio", "error");
+			isValid = false;
+		}
+
+		if (price < 0 || stock < 0) {
+			isValid = false;
+		}
+
+		Product product = null;
+		if (isValid) {
+			product = new Product(productName, price, stock);
+		}
+		return product;
 	}
 
 	private void clearFields() {
@@ -545,6 +596,27 @@ public class Dashboard extends JFrame {
 		txtProductName.requestFocus(true);
 		btnSearch.setEnabled(true);
 		btnRegister.setEnabled(true);
+	}
+
+	private void alertMessage(String _message, String _type) {
+		if (_type.equals("success")) {
+			lblAlertMessage.setForeground(new Color(0, 194, 8));
+		} else if (_type.equals("error")) {
+			lblAlertMessage.setForeground(new Color(252, 87, 87));
+		} else if (_type.equals("warning")) {
+			lblAlertMessage.setForeground(new Color(246, 205, 5));
+		}
+
+		lblAlertMessage.setText(_message);
+
+		Timer timer = new Timer(3000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lblAlertMessage.setText("");
+			}
+		});
+		timer.setRepeats(false);
+		timer.start();
 	}
 
 	private DefaultTableModel tableModel;
@@ -562,6 +634,7 @@ public class Dashboard extends JFrame {
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JPanel jPanel2;
 	private javax.swing.JScrollPane jScrollPane1;
+	private javax.swing.JLabel lblAlertMessage;
 	private javax.swing.JTable tblProducts;
 	private javax.swing.JTextField txtCode;
 	private javax.swing.JTextField txtPrice;
