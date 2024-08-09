@@ -3,31 +3,86 @@ package models;
 import controllers.DatabaseConnection;
 
 import java.sql.*;
-import java.util.LinkedList;
 import java.util.UUID;
 
 public class ProductModel {
-	public void createProduct(Product _product) {
-		String query = "INSERT INTO product VALUES (?, ?, ?)";
+	public int createProduct(Product _product) {
+		int rs = 0;
+		String
+			query
+			= "INSERT INTO product (product_name, price, stock) VALUES (?, ?, ?)";
 		try (Connection conn = DatabaseConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, _product.getProductName());
 			ps.setDouble(2, _product.getPrice());
 			ps.setShort(3, _product.getStock());
-			ps.executeUpdate();
+			rs = ps.executeUpdate();
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
+		return rs;
 	}
 
 	public void updateProduct(Product _product) {
 	}
 
-	public void deleteProduct(UUID _productId) {
+	public int deleteProduct(UUID _productId) {
+		Product product = getProduct(_productId);
+		int response = 0;
+
+
+		if (product != null) {
+			String query = "DELETE FROM product WHERE product_id = ?";
+			try (Connection conn = DatabaseConnection.getConnection()) {
+				PreparedStatement ps = conn.prepareStatement(query);
+				ps.setString(1, product.getProductId().toString());
+				response = ps.executeUpdate();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return response;
 	}
 
-	public Product getProduct(UUID _productId) {
-		return null;
+	private static Product getProduct(UUID _productId) {
+		System.out.println("lleggoooo a buscar-------- " + _productId);
+		Product product = null;
+		String
+			query
+			= "SELECT product_id, product_name, price, stock FROM product WHERE product_id = ?";
+		try (Connection conn = DatabaseConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, _productId.toString());
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				System.out.println("Obtuvimos-------- " + rs.getString("product_name"));
+				System.out.println(rs.getString("product_name"));
+				product = new Product(
+					UUID.fromString(rs.getString("product_id")),
+					rs.getString("product_name"),
+					rs.getDouble("price"),
+					rs.getShort("stock")
+				);
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+		return product;
+	}
+
+	public ResultSet searchProduct(String _productName) {
+		ResultSet rs = null;
+		String
+			query
+			= "SELECT product_id, product_name, price, stock FROM product WHERE LOWER(product_name) LIKE LOWER(?)";
+		try (Connection conn = DatabaseConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, "%" + _productName + "%");
+			rs = ps.executeQuery();
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+		return rs;
 	}
 
 	public ResultSet getAllProducts() {
@@ -37,7 +92,6 @@ public class ProductModel {
 			Statement stmt = conn.createStatement();
 
 			rs = stmt.executeQuery(query);
-			// rs = stmt.getResultSet();
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}

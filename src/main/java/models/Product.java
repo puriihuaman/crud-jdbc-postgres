@@ -18,6 +18,12 @@ public class Product {
 		this.stock = _stock;
 	}
 
+	public Product(String _productName, double _price, short _stock) {
+		this.productName = _productName;
+		this.price = _price;
+		this.stock = _stock;
+	}
+
 	public UUID getProductId() {
 		return this.productId;
 	}
