@@ -1,6 +1,5 @@
 package controllers;
 
-
 import models.Product;
 import models.ProductModel;
 
@@ -11,6 +10,24 @@ import java.util.List;
 import java.util.UUID;
 
 public class ProductController {
+	private Product getProduct(UUID _productId) {
+		Product product = null;
+
+		try (ResultSet rs = productModel.getProduct(_productId)) {
+			if (rs.next()) {
+				product = new Product(
+					UUID.fromString(rs.getString("product_id")),
+					rs.getString("product_name"),
+					rs.getDouble("price"),
+					rs.getShort("stock")
+				);
+			}
+		} catch (SQLException ex) {
+			throw new RuntimeException(ex);
+		}
+		return product;
+	}
+
 	public String createProduct(Product _product) {
 		int response = productModel.createProduct(_product);
 
@@ -20,16 +37,33 @@ public class ProductController {
 	}
 
 	public String updateProduct(Product _product) {
-		int response = productModel.updateProduct(_product);
-		return response == 1 ?
-			"Producto actualizado exitosamente" :
-			"Falló la actualización del producto";
+		Product product = getProduct(_product.getProductId());
+		if (product == null) return "El producto no existe";
+
+		try (ResultSet rs = productModel.updateProduct(product)) {
+			if (rs.next()) {
+				int rowsAffected = rs.getInt("rows_affected");
+				return rowsAffected > 0 ?
+					"Producto actualizado exitosamente" :
+					"Falló la actualización del producto";
+
+			} else {
+				return "El producto no existe";
+			}
+
+		} catch (SQLException ex) {
+			return "Ocurrió un error al eliminar el producto. Por favor, intenta de nuevo más tarde.";
+		}
 	}
 
 	public String deleteProduct(UUID _productId) {
-		int response = productModel.deleteProduct(_productId);
-		return response == 1 ?
-			"Producto eliminado exitosamente" :
+		Product product = getProduct(_productId);
+
+		if (product == null) return "El producto no existe";
+		int rowsAffected = productModel.deleteProduct(product.getProductId());
+
+		return rowsAffected > 0 ?
+			"El producto se eliminado exitosamente" :
 			"Falló la eliminación del producto";
 	}
 

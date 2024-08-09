@@ -2,7 +2,6 @@ package models;
 
 import controllers.DatabaseConnection;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.UUID;
 
@@ -24,25 +23,20 @@ public class ProductModel {
 		return rs;
 	}
 
-	public int updateProduct(Product _product) {
-		Product product = getProduct(_product.getProductId());
-		
-		int rs = 0;
+	public ResultSet updateProduct(Product _product) {
+		ResultSet rs = null;
+		String
+			query
+			= "UPDATE product SET product_name = ?, price = ?, stock = ? WHERE product_id = CAST(? AS UUID)";
 
 		try (Connection conn = DatabaseConnection.getConnection()) {
-			if (product != null) {
-				String
-					query
-					= "UPDATE product SET product_name = ?, price = ?, stock = ? WHERE product_id = CAST(? AS UUID)";
-				PreparedStatement ps = conn.prepareStatement(query);
-				ps.setString(1, _product.getProductName());
-				ps.setDouble(2, _product.getPrice());
-				ps.setShort(3, _product.getStock());
-				ps.setString(4, _product.getProductId().toString());
-				rs = ps.executeUpdate();
-			} else {
-				rs = 0;
-			}
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, _product.getProductName());
+			ps.setDouble(2, _product.getPrice());
+			ps.setShort(3, _product.getStock());
+			ps.setString(4, _product.getProductId().toString());
+			rs = ps.executeQuery();
+
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
@@ -50,43 +44,32 @@ public class ProductModel {
 	}
 
 	public int deleteProduct(UUID _productId) {
-		Product product = getProduct(_productId);
-		int response = 0;
+		int rs = 0;
+		String query = "DELETE FROM product WHERE product_id = CAST(? AS UUID)";
 
-		if (product != null) {
-			String query = "DELETE FROM product WHERE product_id = CAST(? AS UUID)";
-			try (Connection conn = DatabaseConnection.getConnection()) {
-				PreparedStatement ps = conn.prepareStatement(query);
-				ps.setString(1, product.getProductId().toString());
-				response = ps.executeUpdate();
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			}
+		try (Connection conn = DatabaseConnection.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, _productId.toString());
+			rs = ps.executeUpdate();
+		} catch (SQLException ex) {
+			throw new RuntimeException(ex);
 		}
-		return response;
+		return rs;
 	}
 
-	private static Product getProduct(UUID _productId) {
-		Product product = null;
+	public ResultSet getProduct(UUID _productId) {
+		ResultSet rs = null;
 		String
 			query
 			= "SELECT product_id, product_name, price, stock FROM product WHERE product_id = CAST(? AS UUID)";
 		try (Connection conn = DatabaseConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, _productId.toString());
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				product = new Product(
-					UUID.fromString(rs.getString("product_id")),
-					rs.getString("product_name"),
-					rs.getDouble("price"),
-					rs.getShort("stock")
-				);
-			}
+			rs = ps.executeQuery();
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
-		return product;
+		return rs;
 	}
 
 	public ResultSet searchProduct(String _productName) {
@@ -116,6 +99,4 @@ public class ProductModel {
 		}
 		return rs;
 	}
-
-
 }
