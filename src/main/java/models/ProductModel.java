@@ -23,8 +23,8 @@ public class ProductModel {
 		return rs;
 	}
 
-	public ResultSet updateProduct(Product _product) {
-		ResultSet rs = null;
+	public int updateProduct(Product _product) {
+		int rs = 0;
 		String
 			query
 			= "UPDATE product SET product_name = ?, price = ?, stock = ? WHERE product_id = CAST(? AS UUID)";
@@ -35,8 +35,7 @@ public class ProductModel {
 			ps.setDouble(2, _product.getPrice());
 			ps.setShort(3, _product.getStock());
 			ps.setString(4, _product.getProductId().toString());
-			rs = ps.executeQuery();
-
+			rs = ps.executeUpdate();
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}

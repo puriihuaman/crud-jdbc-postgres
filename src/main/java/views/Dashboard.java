@@ -2,6 +2,7 @@ package views;
 
 import controllers.ProductController;
 import models.Product;
+import models.ResponseType;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -178,8 +179,7 @@ public class Dashboard extends JFrame {
 										javax.swing.GroupLayout.PREFERRED_SIZE,
 										60,
 										javax.swing.GroupLayout.PREFERRED_SIZE
-									).addGap(16, 16, 16).addComponent(
-										txtCode,
+									).addGap(16, 16, 16).addComponent(txtCode,
 										javax.swing.GroupLayout.PREFERRED_SIZE,
 										100,
 										javax.swing.GroupLayout.PREFERRED_SIZE
@@ -189,8 +189,7 @@ public class Dashboard extends JFrame {
 										javax.swing.GroupLayout.PREFERRED_SIZE,
 										60,
 										javax.swing.GroupLayout.PREFERRED_SIZE
-									).addGap(18, 18, 18).addComponent(
-										txtPrice,
+									).addGap(18, 18, 18).addComponent(txtPrice,
 										javax.swing.GroupLayout.PREFERRED_SIZE,
 										100,
 										javax.swing.GroupLayout.PREFERRED_SIZE
@@ -203,8 +202,7 @@ public class Dashboard extends JFrame {
 										javax.swing.GroupLayout.PREFERRED_SIZE,
 										90,
 										javax.swing.GroupLayout.PREFERRED_SIZE
-									).addGap(16, 16, 16).addComponent(
-										txtStock,
+									).addGap(16, 16, 16).addComponent(txtStock,
 										javax.swing.GroupLayout.PREFERRED_SIZE,
 										200,
 										javax.swing.GroupLayout.PREFERRED_SIZE
@@ -214,8 +212,7 @@ public class Dashboard extends JFrame {
 										javax.swing.GroupLayout.PREFERRED_SIZE,
 										90,
 										javax.swing.GroupLayout.PREFERRED_SIZE
-									).addGap(16, 16, 16).addComponent(
-										txtProductName,
+									).addGap(16, 16, 16).addComponent(txtProductName,
 										javax.swing.GroupLayout.PREFERRED_SIZE,
 										340,
 										javax.swing.GroupLayout.PREFERRED_SIZE
@@ -225,34 +222,28 @@ public class Dashboard extends JFrame {
 								javax.swing.GroupLayout.PREFERRED_SIZE,
 								140,
 								javax.swing.GroupLayout.PREFERRED_SIZE
-							).addGap(32, 32, 32).addComponent(
-								btnRegister,
+							).addGap(32, 32, 32).addComponent(btnRegister,
 								javax.swing.GroupLayout.PREFERRED_SIZE,
 								140,
 								javax.swing.GroupLayout.PREFERRED_SIZE
-							).addGap(32, 32, 32).addComponent(
-								btnUpdate,
+							).addGap(32, 32, 32).addComponent(btnUpdate,
 								javax.swing.GroupLayout.PREFERRED_SIZE,
 								140,
 								javax.swing.GroupLayout.PREFERRED_SIZE
-							).addGap(32, 32, 32).addComponent(
-								btnDelete,
+							).addGap(32, 32, 32).addComponent(btnDelete,
 								javax.swing.GroupLayout.PREFERRED_SIZE,
 								140,
 								javax.swing.GroupLayout.PREFERRED_SIZE
 							))
-							.addGroup(
-								javax.swing.GroupLayout.Alignment.TRAILING,
-								FormLayout.createSequentialGroup().addComponent(
-									lblAlertMessage,
+							.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+								FormLayout.createSequentialGroup().addComponent(lblAlertMessage,
 									javax.swing.GroupLayout.PREFERRED_SIZE,
 									438,
 									javax.swing.GroupLayout.PREFERRED_SIZE
 								).addGap(140, 140, 140)
 							))
 						.addGap(32, 32, 32))
-					.addComponent(
-						jLabel1,
+					.addComponent(jLabel1,
 						javax.swing.GroupLayout.DEFAULT_SIZE,
 						729,
 						Short.MAX_VALUE
@@ -267,15 +258,13 @@ public class Dashboard extends JFrame {
 				.addGroup(FormLayout
 					.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 					.addComponent(jLabel2)
-					.addComponent(
-						txtCode,
+					.addComponent(txtCode,
 						javax.swing.GroupLayout.PREFERRED_SIZE,
 						40,
 						javax.swing.GroupLayout.PREFERRED_SIZE
 					)
 					.addComponent(jLabel3)
-					.addComponent(
-						txtProductName,
+					.addComponent(txtProductName,
 						javax.swing.GroupLayout.PREFERRED_SIZE,
 						40,
 						javax.swing.GroupLayout.PREFERRED_SIZE
@@ -284,15 +273,13 @@ public class Dashboard extends JFrame {
 				.addGroup(FormLayout
 					.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 					.addComponent(jLabel4)
-					.addComponent(
-						txtPrice,
+					.addComponent(txtPrice,
 						javax.swing.GroupLayout.PREFERRED_SIZE,
 						40,
 						javax.swing.GroupLayout.PREFERRED_SIZE
 					)
 					.addComponent(jLabel5)
-					.addComponent(
-						txtStock,
+					.addComponent(txtStock,
 						javax.swing.GroupLayout.PREFERRED_SIZE,
 						40,
 						javax.swing.GroupLayout.PREFERRED_SIZE
@@ -302,26 +289,22 @@ public class Dashboard extends JFrame {
 				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 				.addGroup(FormLayout
 					.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-					.addComponent(
-						btnSearch,
+					.addComponent(btnSearch,
 						javax.swing.GroupLayout.PREFERRED_SIZE,
 						40,
 						javax.swing.GroupLayout.PREFERRED_SIZE
 					)
-					.addComponent(
-						btnRegister,
+					.addComponent(btnRegister,
 						javax.swing.GroupLayout.PREFERRED_SIZE,
 						40,
 						javax.swing.GroupLayout.PREFERRED_SIZE
 					)
-					.addComponent(
-						btnUpdate,
+					.addComponent(btnUpdate,
 						javax.swing.GroupLayout.PREFERRED_SIZE,
 						40,
 						javax.swing.GroupLayout.PREFERRED_SIZE
 					)
-					.addComponent(
-						btnDelete,
+					.addComponent(btnDelete,
 						javax.swing.GroupLayout.PREFERRED_SIZE,
 						40,
 						javax.swing.GroupLayout.PREFERRED_SIZE
@@ -359,8 +342,7 @@ public class Dashboard extends JFrame {
 				.addGroup(jPanel2Layout
 					.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(
-						jScrollPane1,
+					.addComponent(jScrollPane1,
 						javax.swing.GroupLayout.DEFAULT_SIZE,
 						723,
 						Short.MAX_VALUE
@@ -374,8 +356,7 @@ public class Dashboard extends JFrame {
 				.addGroup(jPanel2Layout
 					.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(
-						jScrollPane1,
+					.addComponent(jScrollPane1,
 						javax.swing.GroupLayout.DEFAULT_SIZE,
 						329,
 						Short.MAX_VALUE
@@ -388,8 +369,7 @@ public class Dashboard extends JFrame {
 		jPanel1.setLayout(jPanel1Layout);
 		jPanel1Layout.setHorizontalGroup(jPanel1Layout
 			.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-			.addComponent(
-				jPanel2,
+			.addComponent(jPanel2,
 				javax.swing.GroupLayout.Alignment.TRAILING,
 				javax.swing.GroupLayout.PREFERRED_SIZE,
 				javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -397,8 +377,7 @@ public class Dashboard extends JFrame {
 			)
 			.addGroup(jPanel1Layout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addComponent(
-					Form,
+				.addComponent(Form,
 					javax.swing.GroupLayout.Alignment.TRAILING,
 					javax.swing.GroupLayout.DEFAULT_SIZE,
 					javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -406,13 +385,11 @@ public class Dashboard extends JFrame {
 				)));
 		jPanel1Layout.setVerticalGroup(jPanel1Layout
 			.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-			.addGroup(
-				javax.swing.GroupLayout.Alignment.TRAILING,
+			.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
 				jPanel1Layout
 					.createSequentialGroup()
 					.addGap(0, 248, Short.MAX_VALUE)
-					.addComponent(
-						jPanel2,
+					.addComponent(jPanel2,
 						javax.swing.GroupLayout.PREFERRED_SIZE,
 						javax.swing.GroupLayout.DEFAULT_SIZE,
 						javax.swing.GroupLayout.PREFERRED_SIZE
@@ -420,8 +397,7 @@ public class Dashboard extends JFrame {
 			)
 			.addGroup(jPanel1Layout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(jPanel1Layout.createSequentialGroup().addComponent(
-					Form,
+				.addGroup(jPanel1Layout.createSequentialGroup().addComponent(Form,
 					javax.swing.GroupLayout.PREFERRED_SIZE,
 					javax.swing.GroupLayout.DEFAULT_SIZE,
 					javax.swing.GroupLayout.PREFERRED_SIZE
@@ -433,16 +409,14 @@ public class Dashboard extends JFrame {
 		getContentPane().setLayout(layout);
 		layout.setHorizontalGroup(layout
 			.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-			.addComponent(
-				jPanel1,
+			.addComponent(jPanel1,
 				javax.swing.GroupLayout.DEFAULT_SIZE,
 				javax.swing.GroupLayout.DEFAULT_SIZE,
 				Short.MAX_VALUE
 			));
 		layout.setVerticalGroup(layout
 			.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-			.addComponent(
-				jPanel1,
+			.addComponent(jPanel1,
 				javax.swing.GroupLayout.Alignment.TRAILING,
 				javax.swing.GroupLayout.DEFAULT_SIZE,
 				javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -499,8 +473,9 @@ public class Dashboard extends JFrame {
 
 		if (!productToSearch.isEmpty() && !productToSearch.isBlank() &&
 			productToSearch.length() != 0) {
-			System.out.println(productToSearch);
 			products = controller.searchProduct(productToSearch.toLowerCase());
+			if (products.size() == 0)
+				alertMessage("No hay ninguna coincidencia.", "success");
 
 			loadTable(products);
 		} else {
@@ -513,9 +488,10 @@ public class Dashboard extends JFrame {
 		Product product = validateFields();
 
 		if (product != null) {
-			String message = controller.createProduct(product);
-			System.out.println(message);
-			alertMessage(message, "success");
+			ResponseType responseType = controller.createProduct(product);
+
+			alertMessage(responseType.getMessage(), responseType.getType());
+			System.out.println(responseType.getMessage());
 			clearFields();
 			uploadProducts();
 		} else {
@@ -529,14 +505,15 @@ public class Dashboard extends JFrame {
 		Product product = validateFields();
 
 		if (product != null && !productId.isEmpty()) {
-			String message = controller.updateProduct(new Product(
-				UUID.fromString(productId),
+			ResponseType
+				responseType
+				= controller.updateProduct(new Product(UUID.fromString(productId),
 				product.getProductName(),
 				product.getPrice(),
 				product.getStock()
 			));
-			alertMessage(message, "success");
-			System.out.println(message);
+			alertMessage(responseType.getMessage(), responseType.getType());
+			System.out.println(responseType.getMessage());
 			clearFields();
 			uploadProducts();
 		} else {
@@ -548,9 +525,10 @@ public class Dashboard extends JFrame {
 	private void btnDeleteActionPerformed(ActionEvent evt) {
 		String productId = txtCode.getText().trim();
 		if (!productId.isEmpty()) {
-			String message = controller.deleteProduct(UUID.fromString(productId));
-			alertMessage(message, "success");
-			System.out.println(message);
+			ResponseType responseType = controller.deleteProduct(UUID.fromString(
+				productId));
+			alertMessage(responseType.getMessage(), responseType.getType());
+			System.out.println(responseType.getMessage());
 			uploadProducts();
 			clearFields();
 		} else {

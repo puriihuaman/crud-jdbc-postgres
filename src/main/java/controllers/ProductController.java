@@ -2,6 +2,7 @@ package controllers;
 
 import models.Product;
 import models.ProductModel;
+import models.ResponseType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,43 +29,43 @@ public class ProductController {
 		return product;
 	}
 
-	public String createProduct(Product _product) {
-		int response = productModel.createProduct(_product);
+	public ResponseType createProduct(Product _product) {
+		List<Product> products = searchProduct(_product.getProductName());
 
-		return response == 1 ?
-			"Producto creado exitosamente" :
-			"Falló la creación del producto";
-	}
-
-	public String updateProduct(Product _product) {
-		Product product = getProduct(_product.getProductId());
-		if (product == null) return "El producto no existe";
-
-		try (ResultSet rs = productModel.updateProduct(product)) {
-			if (rs.next()) {
-				int rowsAffected = rs.getInt("rows_affected");
-				return rowsAffected > 0 ?
-					"Producto actualizado exitosamente" :
-					"Falló la actualización del producto";
-
-			} else {
-				return "El producto no existe";
-			}
-
-		} catch (SQLException ex) {
-			return "Ocurrió un error al eliminar el producto. Por favor, intenta de nuevo más tarde.";
+		if (products.size() == 1) {
+			int response = productModel.createProduct(_product);
+			return response == 0 ?
+				ResponseType.error("Falló la creación del producto") :
+				ResponseType.success("Producto creado exitosamente");
 		}
+		return ResponseType.error("El nombre del producto ya existe");
 	}
 
-	public String deleteProduct(UUID _productId) {
+	public ResponseType updateProduct(Product _product) {
+		Product product = getProduct(_product.getProductId());
+		if (product == null) ResponseType.error("El producto no existe");
+
+		List<Product> products = searchProduct(_product.getProductName());
+
+		if (products.size() == 1) {
+			int rowsAffected = productModel.updateProduct(_product);
+
+			return rowsAffected == 0 ?
+				ResponseType.error("Falló la actualización del producto") :
+				ResponseType.success("Producto actualizado exitosamente");
+		}
+		return ResponseType.error("El nombre del producto ya existe");
+	}
+
+	public ResponseType deleteProduct(UUID _productId) {
 		Product product = getProduct(_productId);
 
-		if (product == null) return "El producto no existe";
+		if (product == null) return ResponseType.error("El producto no existe");
 		int rowsAffected = productModel.deleteProduct(product.getProductId());
 
-		return rowsAffected > 0 ?
-			"El producto se eliminado exitosamente" :
-			"Falló la eliminación del producto";
+		return rowsAffected == 0 ?
+			ResponseType.error("Falló la eliminación del producto") :
+			ResponseType.success("El producto se eliminado exitosamente");
 	}
 
 	public List<Product> searchProduct(String _productName) {
