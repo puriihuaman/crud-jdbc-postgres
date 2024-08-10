@@ -25,3 +25,29 @@ VALUES
 
 SELECT * FROM product;
 
+-- Stored procedure
+CREATE OR REPLACE FUNCTION get_product (_productId VARCHAR)
+RETURNS SETOF product
+LANGUAGE plpgsql AS $$
+BEGIN
+	RETURN QUERY
+	SELECT product_id, product_name, price, stock
+	FROM product
+	WHERE product_id = CAST(_productId AS UUID);
+END $$;
+
+SELECT * FROM get_product('85fd4b1b-a98b-4f93-80cc-c7bd83071d44');
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -57,45 +57,44 @@ public class ProductModel {
 	}
 
 	public ResultSet getProduct(UUID _productId) {
-		ResultSet rs = null;
 		String
 			query
-			= "SELECT product_id, product_name, price, stock FROM product WHERE product_id = CAST(? AS UUID)";
+			= "SELECT product_id, product_name, price, stock FROM get_product(?)";
 		try (Connection conn = DatabaseConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, _productId.toString());
-			rs = ps.executeQuery();
+			RESULT_SET = ps.executeQuery();
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
-		return rs;
+		return RESULT_SET;
 	}
 
 	public ResultSet searchProduct(String _productName) {
-		ResultSet rs = null;
 		String
 			query
 			= "SELECT product_id, product_name, price, stock FROM product WHERE LOWER(product_name) LIKE LOWER(?)";
 		try (Connection conn = DatabaseConnection.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, "%" + _productName + "%");
-			rs = ps.executeQuery();
+			RESULT_SET = ps.executeQuery();
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
-		return rs;
+		return RESULT_SET;
 	}
 
 	public ResultSet getAllProducts() {
-		ResultSet rs = null;
 		String query = "SELECT product_id, product_name, price, stock FROM product";
 		try (Connection conn = DatabaseConnection.getConnection()) {
 			Statement stmt = conn.createStatement();
 
-			rs = stmt.executeQuery(query);
+			RESULT_SET = stmt.executeQuery(query);
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
-		return rs;
+		return RESULT_SET;
 	}
+
+	private ResultSet RESULT_SET = null;
 }

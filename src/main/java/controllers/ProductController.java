@@ -30,9 +30,9 @@ public class ProductController {
 	}
 
 	public ResponseType createProduct(Product _product) {
-		List<Product> products = searchProduct(_product.getProductName());
+		boolean isExist = isExistProduct(_product.getProductName());
 
-		if (products.size() == 1) {
+		if (!isExist) {
 			int response = productModel.createProduct(_product);
 			return response == 0 ?
 				ResponseType.error("Falló la creación del producto") :
@@ -45,9 +45,9 @@ public class ProductController {
 		Product product = getProduct(_product.getProductId());
 		if (product == null) ResponseType.error("El producto no existe");
 
-		List<Product> products = searchProduct(_product.getProductName());
+		boolean isExist = isExistProduct(_product.getProductName());
 
-		if (products.size() == 1) {
+		if (!isExist) {
 			int rowsAffected = productModel.updateProduct(_product);
 
 			return rowsAffected == 0 ?
@@ -92,6 +92,20 @@ public class ProductController {
 		return products;
 	}
 
+	private boolean isExistProduct(String _productName) {
+		List<Product> products = searchProduct(_productName);
+		boolean isExist = false;
+		for (Product product : products) {
+			if (product
+				.getProductName()
+				.toLowerCase()
+				.equals(_productName.toLowerCase())) {
+				isExist = true;
+			}
+		}
+		return isExist;
+	}
+
 	private Product convert(ResultSet _rs) {
 		Product product = null;
 		try {
@@ -104,8 +118,6 @@ public class ProductController {
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
-
-
 		return product;
 	}
 
