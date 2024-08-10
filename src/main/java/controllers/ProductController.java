@@ -92,7 +92,7 @@ public class ProductController {
 		return products;
 	}
 
-	private boolean isExistProduct(String _productName) {
+	public boolean isExistProduct(String _productName) {
 		List<Product> products = searchProduct(_productName);
 		boolean isExist = false;
 		for (Product product : products) {

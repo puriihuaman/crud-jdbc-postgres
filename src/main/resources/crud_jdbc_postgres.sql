@@ -36,10 +36,9 @@ BEGIN
 	WHERE product_id = CAST(_productId AS UUID);
 END $$;
 
-SELECT * FROM get_product('85fd4b1b-a98b-4f93-80cc-c7bd83071d44');
+SELECT product_id, product_name, price, stock FROM get_product('aafa617d-94d8-405d-9ea1-7f7dc1905a73');
 
-
-
+DELETE FROM product WHERE product_id = 'aafa617d-94d8-405d-9ea1-7f7dc1905a73';
 
 
 
